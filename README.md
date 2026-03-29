@@ -492,8 +492,7 @@ print(response.json())
 ### 目标Deck配置
 
 默认目标deck：`2021 红宝书`
-[牌组地址]([https://www.runoob.com](https://ankiweb.net/shared/info/749266346
-))
+[牌组地址](https://ankiweb.net/shared/info/749266346)  
 Anki笔记字段结构（9个字段）：
 ```
 字段0: 编号
