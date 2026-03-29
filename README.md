@@ -61,6 +61,312 @@ Android路径：`/data/data/com.maimemo.android.momo/databases/`
 
 ## 项目结构
 
+### 文件说明
+
+本项目包含70个Python脚本，按功能分为以下几类：
+
+#### 📊 数据提取与分析脚本
+
+**extract_reviewed_words_from_anki.py** ⭐
+- 提取Anki中有复习记录的单词
+- 关联墨墨数据库获取FM值
+- 输出需要释义的单词列表
+- **关键输出**: `words_need_interpretations.json`
+
+**extract_momo_words_from_anki.py**
+- 从Anki提取所有单词
+- 与墨墨数据库比对
+- 生成单词对照表
+
+**extract_review_records.py**
+- 提取墨墨复习记录
+- 分析学习时间分布
+
+**extract_words_from_anki.py**
+- 基础脚本：提取Anki笔记中的单词
+
+**analyze_dataset_quality.py**
+- 分析数据集质量
+- 统计单词覆盖率
+- 生成质量报告
+
+**analyze_pdf_formats.py**
+- 分析PDF格式
+- 测试不同提取方法
+
+#### 🔄 FSRS参数更新脚本
+
+**update_fsrs_difficulty.py** ⭐
+- 根据墨墨FM值重置Anki FSRS难度参数
+- FM值映射：FM=1→9.0, FM=9→3.0
+- 更新cards.data字段（JSON格式）
+- **核心功能**: 将墨墨记忆曲线迁移到FSRS
+
+**update_anki_schedule.py**
+- 更新Anki调度信息
+- 调整复习间隔
+
+**update_cards_after_import.py**
+- 导入后更新卡片状态
+- 重新计算调度
+
+**update_schedule_from_lsr.py**
+- 从LSR表更新调度信息
+- 重建复习计划
+
+#### 📖 释义提取脚本
+
+**extract_pdf_correct.py** ⭐
+- 使用pdfplumber解析墨墨单词本PDF
+- 提取单词、词性、中文释义
+- 支持多词性、多释义合并
+- **输出**: `interpretations_results.json`
+
+**extract_pdf_improved.py**
+- 改进版PDF提取
+- 更好的正则匹配
+- 处理复杂格式
+
+**extract_pdf_complete.py**
+- 完整版PDF提取
+- 处理所有边界情况
+- 多种表格格式
+
+**extract_pdf_perfect.py**
+- 完美版PDF提取
+- 最高准确率
+
+**extract_pdf_final.py**
+- 最终版PDF提取
+- 整合所有优化
+
+**extract_pdf_all.py**
+- 提取PDF中所有单词
+- 统计覆盖率
+
+**extract_pdf_smart.py**
+- 智能PDF提取
+- 自适应格式识别
+
+**extract_pdf_tables.py**
+- 表格格式PDF提取
+- 处理复杂表格结构
+
+**extract_pdf_text.py**
+- 纯文本模式PDF提取
+
+**extract_pdf_text_parser.py**
+- 文本解析器
+- 支持多种格式
+
+**extract_pdf_simple.py**
+- 简单版PDF提取
+- 快速提取
+
+**extract_pdf_debug.py**
+- 调试版PDF提取
+- 详细日志输出
+
+**extract_from_pdf.py**
+- 通用PDF提取接口
+
+**preview_pdf_content.py**
+- PDF内容预览
+- 调试工具
+
+**preview_pdf_to_file.py**
+- PDF预览输出到文件
+
+**fetch_interpretations.py** ⭐
+- 从墨墨API获取释义（已弃用）
+- API认证失败后的备用方案
+
+**fetch_interpretations_from_db.py**
+- 从墨墨数据库INA_TB表获取释义
+- 备用释义来源
+
+#### 🔧 释义应用脚本
+
+**apply_interpretations_to_anki.py** ⭐
+- 通过AnkiConnect API批量更新笔记字段
+- 更新"笔记"字段（字段索引8）
+- 支持速率限制和错误处理
+- **核心功能**: 将释义写入Anki
+
+**add_interpretations.py**
+- 早期版本：直接操作Anki数据库
+- 添加释义到笔记字段
+
+**add_interpretations_ankiconnect.py**
+- 使用AnkiConnect添加释义
+- 支持批量操作
+
+**add_new_words.py**
+- 添加新单词到Anki
+- 从墨墨导入新词
+
+#### 📥 导入与迁移脚本
+
+**import_momo_to_hongbaoshu.py** ⭐
+- 将墨墨单词导入到红宝书deck
+- 创建新笔记和卡片
+- 设置初始字段
+
+**import_memory_to_hongbaoshu.py**
+- 导入记忆曲线数据
+- 多个版本迭代
+
+**import_memory_to_hongbaoshu_fixed.py**
+- 修复版导入脚本
+
+**import_memory_to_hongbaoshu_append.py**
+- 追加模式导入
+
+**import_memory_to_hongbaoshu_smart.py**
+- 智能导入模式
+
+**import_memory_smart_full.py**
+- 完整智能导入
+
+**import_memory_4level.py**
+- 四级记忆模型导入
+
+**import_hongbaoshu_from_lsr.py**
+- 从LSR表导入红宝书单词
+
+**import_review_history.py** ⭐
+- 导入复习历史记录
+- 重建revlog表
+
+**import_review_history_stats.py**
+- 导入复习历史统计
+- 生成报告
+
+**import_to_anki.py**
+- 通用导入接口
+
+**add_momo_to_hongbaoshu.py**
+- 将墨墨单词添加到红宝书
+
+#### 🔍 检查与诊断脚本
+
+**check_anki_cards.py**
+- 检查Anki卡片状态
+- 统计卡片分布
+
+**check_anki_model.py**
+- 检查Anki模型定义
+- 验证字段配置
+
+**check_all_fields.py**
+- 检查所有字段完整性
+- 发现字段缺失
+
+**check_fields.py**
+- 基础字段检查
+
+**check_hongbaoshu.py**
+- 检查红宝书deck状态
+
+**check_cards_due.py**
+- 检查到期卡片
+- 统计复习队列
+
+**check_cards_status.py**
+- 检查卡片学习状态
+- 新卡片/复习卡片
+
+**check_review_cards.py**
+- 检查复习卡片状态
+
+**check_revlog_types.py**
+- 检查revlog类型分布
+- 分析学习行为
+
+**check_revlog_vs_cards.py**
+- 比对revlog与cards
+- 数据一致性检查
+
+**check_issues.py**
+- 检查数据问题
+- 发现异常数据
+
+**find_deck.py**
+- 查找指定deck
+- 获取deck ID
+
+#### 🧹 清理脚本
+
+**clean_old_data.py**
+- 清理旧数据
+- 数据库维护
+
+**clear_hongbaoshu.py**
+- 清空红宝书deck
+- 删除所有卡片
+
+**clear_revlog.py**
+- 清空复习历史
+- 重置学习进度
+
+**clear_and_reimport.py**
+- 清空并重新导入
+- 完整重置
+
+#### 🧪 测试脚本
+
+**test_ankiconnect.py**
+- 测试AnkiConnect连接
+- API调用测试
+
+**test_fields.py**
+- 测试字段读写
+- 字段验证
+
+**test_models.py**
+- 测试模型配置
+- 验证字段结构
+
+**test_regex.py**
+- 测试正则表达式
+- PDF解析测试
+
+**test_single_note.py**
+- 单个笔记测试
+- 调试工具
+
+#### 📊 查询脚本
+
+**query_date_revlog.py**
+- 按日期查询复习记录
+- 时间范围分析
+
+**query_word_revlog.py**
+- 按单词查询复习记录
+- 单词学习历史
+
+#### 🔐 解密脚本
+
+**decrypt_momo.py**
+- 解密墨墨数据库
+- 处理加密字段
+
+#### 📚 辅助脚本
+
+**update_cards_after_import.py**
+- 导入后更新卡片
+- 重新计算调度
+
+#### 📄 文档文件
+
+**README.md** ⭐
+- 项目主文档
+- 完整使用说明
+
+**README_interpretations.md**
+- 释义提取专项文档
+- API说明
+
 ### 核心脚本
 
 #### 1. 数据提取
