@@ -1,13 +1,15 @@
 # 墨墨背单词数据迁移到Anki FSRS工具
+<img width="626" height="415" alt="f22b295842707f24d1c47cad6607e909" src="https://github.com/user-attachments/assets/6ffa6678-6c42-44c7-914b-f27638894956" />
 
 ## 项目背景
+数据包含加入规划的单词、单词每天第一次评分的记忆记录（尚不确定是否完全）、单词释义。
 
 由于墨墨公开了API，但未完全开放复习信息，这对我单词数据的迁移造成了困难，为此需求我开发了这个程序，仅供自己使用，当然如果有同样需求也可以。
 
 **注意：** 本程序并非使用墨墨网页版的逆向，而是通过root获取`/data/data/com.maimemo.android.momo/databases/`然后进行适配，因此需要有root权限。
 
 本程序仅用于学习，本程序的目的是为了将我的墨墨的复习数据迁移到FSRS里，以让FSRS快速适应我的记忆。需求基于我自身对背单词软件的考虑，与软件运作模式无关。
-
+本项目的脚本即使可能不能直接使用，也可让AI阅读本仓库也可以给AI迅速找到方向。
 ## 功能概述
 
 ### 核心功能
@@ -63,7 +65,7 @@ Android路径：`/data/data/com.maimemo.android.momo/databases/`
 
 ### 文件说明
 
-本项目包含70个Python脚本，按功能分为以下几类：
+本项目包含70个Python脚本，有些为调试时测试使用，重点使用星标的脚本，全部按功能分为以下几类：
 
 #### 📊 数据提取与分析脚本
 
@@ -490,7 +492,8 @@ print(response.json())
 ### 目标Deck配置
 
 默认目标deck：`2021 红宝书`
-
+[牌组地址]([https://www.runoob.com](https://ankiweb.net/shared/info/749266346
+))
 Anki笔记字段结构（9个字段）：
 ```
 字段0: 编号
@@ -1123,16 +1126,6 @@ with open('words_need_interpretations.json') as f:
 
 ## 参考资料
 
-### 相关项目
-
-- [Anki](https://apps.ankiweb.net/) - 间隔重复软件
-- [AnkiConnect](https://ankiweb.net/shared/info/2055492159) - Anki API插件
-- [FSRS算法](https://github.com/open-spaced-repetition/fsrs4anki) - Free Spaced Repetition Scheduler
-
-### 墨墨背单词
-
-- 官方网站：https://www.maimemo.com/
-- API文档：interpretations-api.md（项目内）
 
 ### 数据库设计
 
@@ -1140,9 +1133,6 @@ with open('words_need_interpretations.json') as f:
 - 墨墨数据库设计：基于SQLite
 - FSRS参数存储：cards.data字段（JSON）
 
-## 致谢
-
-感谢开源社区提供的优秀工具和库，使本项目得以实现。
 
 ---
 
